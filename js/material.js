@@ -35,15 +35,15 @@ $.extend( Material.prototype.module, {
         },
         checkDown : function ( e ) {
             if( mo.validEvent( e ) ) {
-                var se			= mo.serializeEvent( e ),
-                    el 			= $( this ),
-                    ripple 		= $( "<div class='m-ripple-wave' />" ).appendTo( el ),
-                    x 			= se.pageX - el.offset( ).left,
-                    y 			= se.pageY - el.offset( ).top;
+                var se          = mo.serializeEvent( e ),
+                    el          = $( this ),
+                    ripple      = $( "<div class='m-ripple-wave' />" ).appendTo( el ),
+                    x           = se.pageX - el.offset( ).left,
+                    y           = se.pageY - el.offset( ).top;
 
                 ripple.css( {
-                    left 		: x,
-                    top			: y
+                    left        : x,
+                    top	        : y
                 } );
                 
                 setTimeout( function ( ) {
@@ -83,21 +83,21 @@ $.extend( Material.prototype.module, {
         },
         rippleDown : function ( e ) {
             if( mo.validEvent( e ) ) {
-                var se			= mo.serializeEvent( e ),
-                    el 			= $( this ),
-                    ripple 		= $( "<div class='m-ripple-wave' />" ).appendTo( el ),
-                    w			= el.outerWidth( ),
-                    h 			= el.outerHeight( ),
-                    size 		= Math.max(w, h),
-                    x 			= se.pageX - el.offset( ).left,
-                    y 			= se.pageY - el.offset( ).top,
-                    halfsize 	= size / 2,
-                    mid			= Math.abs( (w > h ? x : y) - halfsize);
+                var se          = mo.serializeEvent( e ),
+                    el          = $( this ),
+                    ripple      = $( "<div class='m-ripple-wave' />" ).appendTo( el ),
+                    w           = el.outerWidth( ),
+                    h           = el.outerHeight( ),
+                    size        = Math.max(w, h),
+                    x           = se.pageX - el.offset( ).left,
+                    y           = se.pageY - el.offset( ).top,
+                    halfsize    = size / 2,
+                    mid         = Math.abs( (w > h ? x : y) - halfsize);
 
                 ripple.css( {
-                    left 		: x,
-                    top			: y,
-                    transform	: "scale(" + size / ( (  1 - mid / halfsize + 1 ) * 8.5 ) + ")"
+                    left        : x,
+                    top	        : y,
+                    transform   : "scale(" + size / ( (  1 - mid / halfsize + 1 ) * 8.5 ) + ")"
                 } );
             }
         },
