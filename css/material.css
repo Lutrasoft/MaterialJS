@@ -122,11 +122,18 @@
     -ms-transform: translateY(0);
     transform: translateY(0);
 }
+.m-input[data-length]:after {
+    content: attr(data-length) '/' attr(data-maxlength);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 5px 0 0 0;
+}
 /* 
 	Radio
 	Dependency: Ripple
 */
-.m-radio, .m-checkbox {
+.m-radio, .m-checkbox, .m-checkbox-checkmark {
 	display: block;
 	position: relative;
 	padding-left: 30px;
@@ -136,7 +143,7 @@
 input[type=radio], input[type=checkbox] {
 	display: none;
 }
-.m-radio:before {
+.m-radio label:before {
 	content: '';
 	border: 2px solid #727272;
 	border: 2px solid rgba(0, 0, 0, 0.54);
@@ -152,7 +159,7 @@ input[type=radio], input[type=checkbox] {
 	-webkit-transition: border 0.87s;
 	transition: border 0.87s;
 }
-.m-radio:after {
+.m-radio label:after {
 	content: '';
 	width: 20px;
 	height: 20px;
@@ -169,18 +176,18 @@ input[type=radio], input[type=checkbox] {
 	transition: transform 0.28s;
 	cursor: pointer;
 }
-input:checked + .m-radio:before {
+.m-radio input:checked + label:before {
 	border-color: #009688;
 }
-input:checked + .m-radio:after {
+.m-radio input:checked + label:after {
 	-webkit-transform: scale(0.55);
 	transform: scale(0.55);
 }
-input:disabled + .m-radio:before {
+.m-radio input:disabled + label:before {
 	border-color: #b9b9b9;
 	border-color: rgba(0,0,0,0.26);
 }
-input:disabled + .m-radio:after {
+.m-radio input:disabled + label:after {
 	background: #b9b9b9;
 	border-color: rgba(0,0,0,0.26);
 }
@@ -200,7 +207,7 @@ input:disabled + .m-radio:after {
 }
 
 /* Checkbox */
-.m-checkbox:before {
+.m-checkbox label:before, .m-checkbox-checkmark label:before {
 	content: '';
 	border: 2px solid #727272;
 	border: 2px solid rgba(0, 0, 0, 0.54);
@@ -216,7 +223,7 @@ input:disabled + .m-radio:after {
 	-webkit-transition: border 0.87s;
 	transition: border 0.87s;
 }
-.m-checkbox:after {
+.m-checkbox label:after {
 	content: '';
 	width: 20px;
 	height: 20px;
@@ -233,18 +240,18 @@ input:disabled + .m-radio:after {
 	transition: transform 0.28s;
 	cursor: pointer;
 }
-input:checked + .m-checkbox:before {
+.m-checkbox input:checked + label:before {
 	border-color: #009688;
 }
-input:checked + .m-checkbox:after {
+.m-checkbox input:checked + label:after {
 	-webkit-transform: rotate(90deg) scale(1);
 	transform: rotate(90deg) scale(1);
 }
-input:disabled + .m-checkbox:before {
+.m-checkbox input:disabled + label:before {
 	border-color: #b9b9b9;
 	border-color: rgba(0,0,0,0.26);
 }
-input:disabled + .m-checkbox:after {
+.m-checkbox input:disabled + label:after {
 	background: #b9b9b9;
 	border-color: rgba(0,0,0,0.26);
 }
@@ -263,45 +270,50 @@ input:disabled + .m-checkbox:after {
 	top: 15px !important;
 }
 
+.m-checkbox-checkmark label:before {
+    -webkit-transition: -webkit-transform 0.28s, border 0.28s, width 0.28s, height 0.28s, left 0.28s, top 0.28s;
+	transition: transform 0.28s, border 0.28s, width 0.28s, height 0.28s, left 0.28s, top 0.28s;
+    transform-origin: 100% 100%;
+    left: 0;
+    -webkit-backface-visibility: hidden;
+}
+.m-checkbox-checkmark input:checked + label:before {
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-right-color: #009688;
+    border-bottom-color: #009688;
+    -webkit-transform: rotate(40deg);
+	transform: rotate(40deg);
+    width: 10px;
+    height: 18px;
+    top: 11px;
+    left: -5px;
+}
+.m-checkbox-checkmark input:checked:disabled + label:before {
+    border-right-color: #b9b9b9;
+    border-bottom-color: #b9b9b9;
+}
+
 /* Checkmark */
 .m-checkbox-check {
-	width: 22px;
-	height: 22px;
-	-ms-transform: rotate(-45deg);
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	position: absolute;
-	left: -1px;
-	top: 4px;
-	z-index: 10;
-	
-	-webkit-transform: scale(0.001); /* If we have a scale of 0, it will not have a rotate transition */
-	transform: scale(0.001);
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 11px;
+    left: 7px;
+    top: 7px;
+    border-bottom: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+	-webkit-transform: scale(0.001) rotate(-40deg); /* If we have a scale of 0, it will not have a rotate transition */
+    transform: scale(0.001) rotate(-40deg);
 	-webkit-transition: -webkit-transform 0.28s;
 	transition: transform 0.28s;
-	
+    z-index: 10;
+    -webkit-backface-visibility: hidden;
 }
-input:checked + .m-checkbox .m-checkbox-check {
-	-webkit-transform: rotate(45deg) scale(1);
-	transform: rotate(45deg) scale(1);
-}
-.m-checkbox-check:before {
-	content: '';
-	position: absolute;
-	width: 1px;
-	height: 12px;
-	background-color: #ffffff;
-	left: 13px;
-	top: 4px;
-}
-.m-checkbox-check:after {
-	content: '';
-	position: absolute;
-	width: 7px;
-	height: 1px;
-	background-color: #ffffff;
-	left: 7px;
-	top: 15px;
+.m-checkbox input:checked + label .m-checkbox-check {
+	-webkit-transform: rotate(40deg) scale(1);
+	transform: rotate(40deg) scale(1);
 }
 
 /* 
@@ -358,4 +370,37 @@ input:checked + .m-checkbox .m-checkbox-check {
 .m-drag {
     z-index: 10;
     position: relative;
+}
+
+/*
+    Dialog
+*/
+.m-dialog {
+    background: #ffffff;
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%), scale(1);
+    transition: all 0.5s;
+    z-index: 100;
+}
+.m-dialog-body {
+    padding: 8px;
+}
+.m-overlay {
+    position: fixed;
+    z-index: 90;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0, 0.1);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.28s;
+}
+.m-overlay.m-show {
+    visibility: visible;
+    opacity: 1;
 }

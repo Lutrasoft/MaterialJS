@@ -1,5 +1,5 @@
 // http://callemall.github.io/material-ui/#/components/date-picker
-(function(){
+( function ( ) {
     
     var mo,
         Material = function ( ) {
@@ -17,13 +17,13 @@
     
     Material.prototype.validEvent = function ( e ) {
         // Disable non-touch events, if we have touch, otherwise touchstart + mousedown will both be triggered
-        if( e.type.indexOf("touch") == 0 ) this.touch = true;
-        return ( this.touch && e.type.indexOf("touch") == 0 ) || !this.touch;
+        if( !e.type.indexOf( "touch" ) ) this.touch = 1;
+        return ( this.touch && !e.type.indexOf( "touch" ) ) || !this.touch;
     };
 
-    $(function(){ 
-        mo = new Material(); 
-    });
+    $( function ( ) { 
+        mo = new Material( ); 
+    } );
 
     /*
         Input
@@ -32,16 +32,30 @@
         input : {
             binding : function ( ) {
                 // Basic ripple, removed by Ripple plugin
-                $( "body" ).on( "input", "input[type=text]", this.inputChange );
+                $( "body" ).on( "input focus",  ".m-input input", this.inputChange );
+                $( "body" ).on( "blur",         ".m-input input", this.inputBlur );
             },
             inputChange : function ( ) {
                 // In CSS we have a input[value] selector, this should be removed so we can redetect empty inputs
                 // Note: If you have an empty value attribute, it will be shown as active
                 //       for modern browsers we can think of input:not([value=""]) selector.
                 $( this )[this.value ? "addClass" : "removeClass"]( "m-active" ).removeAttr( "value" );
+
+                // Set Maxlength if available
+                if( this.hasAttribute( "maxlength" ) ) {
+                    $( this ).closest( ".m-input" ).attr( {
+                        "data-length" : this.value.length,
+                        "data-maxlength" : this.maxLength
+                    } );
+                }
+            },
+            inputBlur : function ( ) {
+                if( this.maxLength ) {
+                    $( this ).closest( ".m-input" ).removeAttr( "data-length data-maxlength" );
+                }
             }
         } 
-    });
+    } );
     
     /*
         Radio
@@ -51,10 +65,10 @@
         radioCheckbox : {
             binding : function ( ) {
                 // Basic ripple, removed by Ripple plugin
-                $( "body" ).on( "mousedown touchstart", ":radio:not(:disabled) + .m-radio, :checkbox:not(:disabled) + .m-checkbox", this.checkDown );
+                $( "body" ).on( "mousedown touchstart", ".m-radio, .m-checkbox", this.checkDown );
             },
             checkDown : function ( e ) {
-                if( mo.validEvent( e ) ) {
+                if( mo.validEvent( e ) && !$( this ).find( "input:disabled" ).length ) {
                     var se          = mo.serializeEvent( e ),
                         el          = $( this ),
                         ripple      = $( "<div class='m-ripple-wave' />" ).appendTo( el ),
@@ -73,7 +87,7 @@
                 }
             }
         } 
-    });
+    } );
     
     /*
         Button
@@ -92,7 +106,7 @@
                 $( ".m-down" ).removeClass("m-down");
             }
         }
-    });
+    } );
     
     /*
         Ripple
@@ -134,18 +148,20 @@
                 }, 750 );
             }
         } 
-    });
+    } );
     
     /*
-        List
+        List : Sortable
     */
     $.extend( Material.prototype.module, { 
-        list : {
+        listSort : {
             binding : function ( ) {
                 // Basic ripple, removed by Ripple plugin
                 $( "body" ).on( "mousedown mousemove mouseup touchstart touchmove touchend", ".m-sortable li", $.proxy( this.dragEvent, this ) );
             },
             dragEvent : function ( e ) {
+                e.preventDefault();
+                
                 if( mo.validEvent( e ) ) {
                     // Every 10ms is more then enough
                     //if( this.lastCall && new Date() - this.lastCall < 10 ) return;
@@ -167,7 +183,6 @@
                         case "mousemove":
                         case "touchmove":
                             if( this.down ) {
-                                e.preventDefault();
                                 var offsetY = this.offsetY;
                                 
                                 el.css( {
@@ -185,7 +200,7 @@
                                 
                                 if( switchWith.length ){
                                     var oldOffsetTop    = el.offset( ).top,
-                                        oldSwitchTop     = switchWith.offset( ).top;
+                                        oldSwitchTop    = switchWith.offset( ).top;
                                     
                                     if( el.prev( ).is( switchWith ) ) {
                                         el.after( switchWith );
@@ -203,11 +218,12 @@
                                     switchWith.data( "newTop", switchWith.offset( ).top ); // Save new position, so if we drag over it, we can directly start moving backwards
                                     switchWith.css( "transform", "translateY(" + -( switchWith.offset( ).top - oldSwitchTop ) + "px)" );
                                     setTimeout( function ( ) {
-                                        switchWith.addClass( "m-animate" ).css( "transform", "translateY(0)" );
+                                        switchWith  .addClass( "m-animate" )
+                                                    .css( "transform", "translateY(0)" );
                                     }, 0 );
                                     setTimeout( function ( ) {
-                                        switchWith.removeData( "newTop" );
-                                        switchWith.removeClass( "m-animate" );
+                                        switchWith  .removeData( "newTop" )
+                                                    .removeClass( "m-animate" );
                                     }, 280 );
                                 }
                             }
@@ -228,5 +244,79 @@
                 }
             }
         } 
-    });
-})();
+    } );
+    
+    
+    /*
+        Input : Datepicker
+    */
+    $.extend( Material.prototype.module, { 
+        datepicker : {
+            binding : function ( ) {
+                $( "body" ).on( "focus", ".m-datepicker", $.proxy( this.open, this ) );
+            },
+            open : function ( e ) {
+                var el      = $( e.currentTarget );
+                this.date    = this.getDate( el.val( ) );
+
+                // Create dialog
+                if( !this.diag ) {
+                    this.diag = new MDialog( this.baseHTML( ) );
+                }
+                
+                this.diag.origin = el;
+                
+                this.diag.show();
+            },
+            baseHTML : function ( ) {
+                return '..Month..';
+            },
+            // Only supports dd-mm-YYYY and YYYY-mm-dd
+            getDate : function ( s ) {
+                var p = s.split("-");
+                if( p[0].length == 4 ) {
+                    return new Date( p[0], p[1] - 1, p[2] );
+                } else {
+                    return new Date( p[2], p[1] - 1, p[0] );
+                }
+            }
+        } 
+    } );
+    
+    function MDialog ( html ) {
+        this.origin     = null;
+        this.element    = $( this.baseHTML( html ) );
+        $( "body" ).append( this.element ) ;
+    }
+    $.extend( MDialog.prototype, {
+        show : function ( ) {
+            
+            if( this.origin ) {
+                var offset = this.origin.offset();
+                this.element.css({
+                    left: offset.left + this.origin.width() / 2,
+                    top: offset.top + + this.origin.height() / 2,
+                    transform: "scale(0.0001)",
+                    display: "block"
+                });
+                setTimeout($.proxy(function(){
+                    this.element.css( {
+                        transform: "scale(1)",
+                        left: "50%",
+                        top: $( "body" ).scrollTop() + $( window ).height() / 2
+                    } );
+                }, this), 0);
+            }
+            
+            if( !$(".m-overlay").length ) {
+                $("body").append("<div class='m-overlay'></div>");
+            }
+            setTimeout(function(){
+                $(".m-overlay").addClass("m-show");
+            }, 0);
+        },
+        baseHTML : function ( html ) {
+            return "<div class='m-dialog'><div class='m-dialog-head'></div><div class='m-dialog-body'>" + html + "</div><div class='m-dialog-footer'></div></div>";
+        }
+    } );
+} )( );

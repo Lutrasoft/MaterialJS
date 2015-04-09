@@ -13,28 +13,50 @@
 <body>
 
     Radio:
-    <input type="radio" name="power" id="power1" />
-    <label class="m-radio" for="power1">1x power</label>
-    <input type="radio" name="power" id="power2" />
-    <label class="m-radio" for="power2">2x power</label>
-    <input type="radio" name="power" id="power4" disabled="disabled" checked="checked" />
-    <label class="m-radio" for="power4">4x power (disabled)</label>
+    <div class="m-radio">
+        <input type="radio" name="power" id="power1" />
+        <label for="power1">1x power</label>
+    </div>
+    <div class="m-radio">
+        <input type="radio" name="power" id="power2" />
+        <label for="power2">2x power</label>
+    </div>
+    <div class="m-radio">
+        <input type="radio" name="power" id="power4" disabled="disabled" checked="checked" />
+        <label for="power4">4x power (disabled)</label>
+    </div>
     <br />
     Checkbox options:
-    <input type="checkbox" name="water" id="water1" />
-    <label class="m-checkbox" for="water1"><span class="m-checkbox-check"></span>1x power</label>
-    <input type="checkbox" name="water" id="water2" />
-    <label class="m-checkbox" for="water2">2x power (no checkmark)</label>
-    <input type="checkbox" name="water" id="water4" disabled="disabled" checked="checked" />
-    <label class="m-checkbox" for="water4"><span class="m-checkbox-check"></span>4x power (disabled)</label>
-    <input type="checkbox" name="water" id="water10" disabled="disabled" checked="checked" />
-    <label class="m-checkbox" for="water10">10x power (disabled, no checkmark)</label>
+    <div class="m-checkbox-checkmark">
+        <input type="checkbox" name="water" id="water0" />
+        <label for="water0">0x power</label>
+    </div>
+    <div class="m-checkbox-checkmark">
+        <input type="checkbox" disabled="disabled" checked="checked" name="water" id="water-1" />
+        <label for="water-1">0x power</label>
+    </div>
+    <div class="m-checkbox">
+        <input type="checkbox" name="water" id="water1" />
+        <label for="water1"><span class="m-checkbox-check"></span>1x power</label>
+    </div>
+    <div class="m-checkbox">
+        <input type="checkbox" name="water" id="water2" />
+        <label for="water2">2x power (no checkmark)</label>
+    </div>
+    <div class="m-checkbox">
+        <input type="checkbox" name="water" id="water4" disabled="disabled" checked="checked" />
+        <label for="water4"><span class="m-checkbox-check"></span>4x power (disabled)</label>
+    </div>
+    <div class="m-checkbox">
+        <input type="checkbox" name="water" id="water10" disabled="disabled" checked="checked" />
+        <label for="water10">10x power (disabled, no checkmark)</label>
+    </div>
     <br />
     Input (floating label): <br />
     <br />
     <div class="m-input">
-        <input id="input1" type="text" />
-        <label for="input1">Name</label>
+        <input id="input1" type="text" maxlength="20" />
+        <label for="input1">Name [maxlength=20]</label>
     </div>
     
     <div class="m-input">
@@ -43,12 +65,17 @@
     </div>
     
     <div class="m-input">
+        <input id="input5" class="m-datepicker" type="text" value="12-05-1989" />
+        <label for="input5">Date</label>
+    </div>
+    
+    <div class="m-input">
         <input id="input4" disabled="disabled" type="text" value="A disabled input" />
         <label for="input4">Name</label>
     </div>
     
     <div class="m-input m-error">
-        <input id="input3" type="text" value="input with error" />
+        <input id="input3" type="text" value="input with error" maxlength="20" />
         <label for="input3">Name</label>
         <label class="m-error-label" for="input3">Username or Password is incorrect.</label>
     </div>
