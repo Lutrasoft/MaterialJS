@@ -381,12 +381,20 @@ input[type=radio], input[type=checkbox] {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%), scale(1);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
     transition: all 0.5s;
-    z-index: 100;
-}
-.m-dialog-body {
-    padding: 8px;
+
+
+
+
+    -webkit-transition: all 0.5s;
+    z-index: 100;    
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    max-width: 80%;
+    max-height: 80%;
 }
 .m-overlay {
     position: fixed;
@@ -403,4 +411,62 @@ input[type=radio], input[type=checkbox] {
 .m-overlay.m-show {
     visibility: visible;
     opacity: 1;
+}
+.m-dialog-title {
+ 	padding: 20px 20px 0;   
+    font-size: 18px;
+    font-weight: bold;
+}
+.m-dialog-body {
+ 	padding: 15px 20px;   
+    font-size: 14px;
+    line-height: 25px;
+}
+.m-dialog-footer {
+ 	padding: 0 16px;   
+}
+.m-dialog-button {
+ 	height: 36px;
+    line-height: 36px;
+    padding: 0 7px;
+    margin: 0 0 14px 8px;
+    float: right;
+    text-transform: uppercase;
+    color: #039BE5;
+    font-size: 14px;
+    cursor: pointer;
+}
+.m-dialog-button .m-ripple-wave {
+	background: #000000;
+}
+/*
+	Toast
+*/
+.m-toast {
+ 	background: #323232;
+    color: #ffffff;
+    font-size: 14px;
+    height: 48px;
+    width: 80%;
+    max-width: 568px;
+    min-width: 288px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    z-index: 100;
+    box-sizing: border-pox;
+    padding: 0 24px;
+    bottom: -48px;
+    position: fixed;
+    line-height: 48px;
+    transition: bottom 0.5s;
+    -webkit-transition: bottom 0.5s;
+    left: 50%;
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);   
+}
+.m-toast.m-show {
+ 	bottom: 48px;   
 }
